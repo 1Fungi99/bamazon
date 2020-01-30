@@ -3,14 +3,8 @@ var inquirer = require("inquirer");
 
 var connection = mysql.createConnection({
   host: "localhost",
-
-  // Your port; if not 3306
   port: 3306,
-
-  // Your username
   user: "root",
-
-  // Your password
   password: "1Fungi99",
   database: "bamazon"
 });
@@ -22,13 +16,12 @@ var SKUArray = [];
 console.log("Selecting all products...\n");
 connection.query("SELECT * FROM products", function(err, res) {
   if (err) throw err;
-  // Log all results of the SELECT statement
   for (var i = 0; i < res.length; i++) {
-    console.log("SKU: " + res[i].item_ID);
-    console.log("Product: " + res[i].product_name);
+    console.log("SKU:        " + res[i].item_ID);
+    console.log("Product:    " + res[i].product_name);
     console.log("Department: " + res[i].department_name);
-    console.log("Price: " + res[i].price);
-    console.log("Stock: " + res[i].stock_quantity);
+    console.log("Price:      " + res[i].price);
+    console.log("Stock:      " + res[i].stock_quantity);
     console.log(" ");
 
     SKUArray.push(res[i].item_ID);
@@ -68,10 +61,7 @@ inquirer
             "We're sorry, but it seems that we are not able to fulfill your order at this time..."
           );
         } else {
-          //   console.log("Server stock: " + res[0].stock_quantity);
-          //   console.log("Requested stock adjustment: " + answers.quantity);
           var updatedStock = res[0].stock_quantity - answers.quantity;
-          //   console.log(updatedStock);
           connection.query(
             "UPDATE products SET stock_quantity = " +
               updatedStock +
@@ -79,7 +69,6 @@ inquirer
               answers.sku,
             function(err, res) {
               if (err) throw err;
-              console.log(res);
               connection.end();
             }
           );
